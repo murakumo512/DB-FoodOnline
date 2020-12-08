@@ -1,0 +1,1 @@
+SELECT * FROM drivers WHERE Driver_od="0" ORDER BY RAND() LIMIT 1;

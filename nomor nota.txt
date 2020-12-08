@@ -1,0 +1,4 @@
+27 id
+08 tanggal
+20 tahun
+05 jam 41 menit 27 detik

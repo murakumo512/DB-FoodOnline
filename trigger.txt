@@ -1,0 +1,71 @@
+DELIMITER $$ 
+CREATE TRIGGER before_buku_update 
+BEFORE UPDATE ON 
+FOR EACH ROW 
+BEGIN 
+INSERT INTO log_pindah_buku 
+SET action = 'update', 
+kode_buku = OLD.kode_buku, 
+posisi_lama = OLD.posisi_buku, 
+waktu_pindah = NOW(); 
+END$$ DELIMITER
+
+
+DELIMITER $$
+ CREATE TRIGGER before_buku_add 
+ BEFORE INSERT ON buku
+ FOR EACH ROW 
+  BEGIN 
+    INSERT INTO log_pindah_buku 
+    SET kode_buku = NEW.kode_buku, posisi_lama = NEW.posisi_buku, waktu_pindah = NOW();
+  END$$
+DELIMITER ; 
+
+
+
+DELIMITER $$
+ CREATE TRIGGER after_insert_buku 
+ AFTER INSERT ON buku
+ FOR EACH ROW 
+  BEGIN 
+    INSERT INTO log_pindah_buku 
+    SET kode_buku = NEW.kode_buku, posisi_lama = NEW.posisi_buku, waktu_pindah = NOW();
+  END$$
+DELIMITER ; 
+
+
+
+
+INSERT INTO buku (kode_buku,nama_buku,pengarang,posisi_buku) VALUES
+("001","IP6","Ado","rak1")
+
+CREATE TABLE `buku` (
+	`kode_buku` VARCHAR(5) PRIMARY KEY ,
+	`nama_buku` VARCHAR(100) NULL  ,
+	`Pengarang` VARCHAR(100) NULL  ,
+	`posisi_buku` VARCHAR(4) 
+)
+
+CREATE TABLE `log_pindah_buku` (
+	`log_id` INT(11) NULL DEFAULT NULL,
+	`kode_buku` VARCHAR(5) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+	`posisi_lama` VARCHAR(5) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+	`posisi_baru` VARCHAR(5) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+	`waktu_pindah` VARCHAR(5) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci'
+	)
+	
+	=====================================
+	
+	DELIMITER $$
+ CREATE TRIGGER after_insert_consumer
+ AFTER INSERT ON consumer
+ FOR EACH ROW 
+  BEGIN 
+    INSERT INTO consumer_log 
+    SET Cons_Nama = NEW.Cons_Nama, Cons_Balanced = NEW.Cons_Balanced, Cons_Location = NEW.Cons_Location, waktu = NOW();
+  END$$
+DELIMITER ; 
+
+
+INSERT INTO consumer (Cons_Nama,Cons_Balanced,Cons_Location) VALUES
+("Budi",5000,"1234 5678")
